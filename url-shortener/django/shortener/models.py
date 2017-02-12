@@ -47,6 +47,10 @@ class ShortUrl(models.Model):
         null=True,
     )
 
+    count = models.IntegerField(
+        default=0,
+    )
+
     def save(self,*args,**kwargs):
         if self.pk or self.code:
             return super(ShortUrl,self).save(*args,**kwargs)

@@ -7,19 +7,22 @@ from .models import ShortUrl
 
 def show_view(request,**kwargs):
     short_url = get_object_or_404(ShortUrl,**kwargs)
-    print request.META
     return render(request,'shorted.html',locals())
 
 def redirect_view(request,**kwargs):
-    short_url = get_object_or_404(ShortUrl,**kwargs)
+    short_url = get_object_or_404(ShortUrl,**kwargs)   
+    short_url.count += 1    
+    short_url.save()
+    print short_url.updated
     return redirect(short_url)
 
 class ShortUrlCreateView(CreateView):
     model = ShortUrl
     fields = ['url']
     template_name = 'home.html'
-
-    def get_success_url(self):
+    ultimas = ShortUrl.objects.all()
+    locals = {'teste': 'Guilherme'}                
+    def get_success_url(self):                
         return resolve_url('shortener:url-preview',code=self.object.code)
 
 
